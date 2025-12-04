@@ -50,13 +50,29 @@ The website fulfills the course constraints:
 ├─ .venv/
 └─ README.md
 ```
+## Libraries & Dependencies Used
+
+The project uses the following key libraries and frameworks:
+
+### Python Libraries
+- selenium — browser automation for dynamic scraping
+- webdriver_manager — automatic ChromeDriver installation
+- pandas — data manipulation and preprocessing
+- sqlite3 — built-in SQLite database interface
+- logging — structured logs for ETL debugging
+- random & time — anti-bot delays
+
+### Airflow & Infrastructure
+- apache-airflow==3.1.3
+- docker
+- docker-compose
 
 ## Pipeline Components
 
 ### 1.Scraper (scraper.py)
 Scrapes all smartphone product pages from Sulpak using:
 
-- Selenium WebDriver
+- Selenium WebDriver and Playwright
 - dynamic “Next page” navigation
 - randomized delays (10–30 seconds) to avoid blocking
 - attribute-based extraction (data-name, data-price)
@@ -137,6 +153,7 @@ Start all services in the background:
 ```python
 docker-compose up -d
 ```
+
 ## Accessing the Airflow Web UI
 
 Airflow UI:
@@ -145,7 +162,7 @@ Airflow UI:
 
 Login:
 ```
-admin / admin
+admin / y3AU29bDSBtMzhsE
 ```
 
 Enable the DAG:
@@ -153,6 +170,8 @@ Enable the DAG:
 sulpak_pipeline
 ```
 ## DAG Configuration
+To ensure that the Airflow DAG runs consistently and completes within a short time during daily scheduling and during the oral defense, an artificial limit of 15 pages was introduced into the scraping stage.
+
 The DAG is defined in:
 ```python
 dags/airflow_dag.py
@@ -165,3 +184,4 @@ retries=2
 retry_delay=timedelta(minutes=5)
 ```
 This ensures that the entire ETL process runs automatically once every 24 hours, with retry logic to recover from temporary failures.
+
