@@ -113,8 +113,6 @@ CREATE TABLE products (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT,
     price REAL,
-    rating REAL,
-    reviews_count REAL,
     product_url TEXT
 ); 
 ```
